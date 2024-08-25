@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation Example</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            color: #000;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px 12px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .input-group input:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            color: green;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Signup Form</h2>
+        <form id="signupForm" novalidate>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter your email">
+                <span id="emailError" class="error-message">Make sure email is more than 3 characters and has '@' and a '.'</span>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password">
+                <span id="passwordError" class="error-message">Make sure password is more than 8 characters.</span>
+            </div>
+            <span id="successMessage" class="success-message">All good to go!</span>
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        // Selecting DOM elements
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+        const successMessage = document.getElementById('successMessage');
+        const signupForm = document.getElementById('signupForm');
+
+        // Email Validation Function
+        function validateEmail() {
+            const emailValue = emailInput.value.trim();
+            const isValidEmail = emailValue.length > 3 && emailValue.includes('@') && emailValue.includes('.');
+            
+            if (isValidEmail) {
+                emailError.style.display = 'none';
+            } else {
+                emailError.style.display = 'block';
+            }
+            return isValidEmail;
+        }
+
+        // Password Validation Function
+        function validatePassword() {
+            const passwordValue = passwordInput.value.trim();
+            const isValidPassword = passwordValue.length > 8;
+            
+            if (isValidPassword) {
+                passwordError.style.display = 'none';
+            } else {
+                passwordError.style.display = 'block';
+            }
+            return isValidPassword;
+        }
+
+        // Form Validation Function
+        function validateForm() {
+            const isEmailValid = validateEmail();
+            const isPasswordValid = validatePassword();
+
+            if (isEmailValid && isPasswordValid) {
+                successMessage.style.display = 'block';
+            } else {
+                successMessage.style.display = 'none';
+            }
+
+            return isEmailValid && isPasswordValid;
+        }
+
+        // Event Listeners for Real-time Validation
+        emailInput.addEventListener('input', () => {
+            validateEmail();
+            validateForm();
+        });
+
+        passwordInput.addEventListener('input', () => {
+            validatePassword();
+            validateForm();
+        });
+
+        // Form Submit Event Listener
+        signupForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form from submitting
+
+            if (validateForm()) {
+                const confirmSubmission = confirm("Are you sure you want to submit?");
+                if (confirmSubmission) {
+                    alert("Successful signup!");
+                    signupForm.reset();
+                    successMessage.style.display = 'none';
+                }
+            } else {
+                alert("Please correct the errors before submitting.");
+            }
+        });
+    </script>
+</body>
+</html>
